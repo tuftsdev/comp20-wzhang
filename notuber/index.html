@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Notuber</title>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+        <meta charset="utf-8"/>
+        <link rel="stylesheet" href="notuber.css" />
+        <script src="https://maps.google.com/maps/api/js?libraries=geometry&sensor=true"></script>
+        <script>
+            var request = new XMLHttpRequest();
+
+            function init() {
+                initMap();
+            }
+
+            var map;
+
+            function initMap() {
+                map = new google.maps.Map(document.getElementById("map"), {
+                    zoom: 15,
+                    center: {lat: myLat, lng: myLng},
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+                getMYLocation();
+            }
+
+            var myLat = 0;
+            var myLng = 0;
+
+            function renderMap() {
+                map.panTo({lat: myLat, lng: myLng});
+
+                var min_distance;
+
+                for (i = 0; i < others.length; i++) {
+                    myLatLng = new google.maps.LatLng({lat: myLat, lng: myLng});
+                    otherLatLng = new google.maps.LatLng({lat: others[i].lat, lng: others[i].lng});
+                    distance = google.maps.geometry.spherical.computeDistanceBetween(myLatLng, otherLatLng) * 0.000621371;
+
+                    if (i == 0 || distance < min_distance) {
+                        min_distance = distance;
+                    }
+
+                    marker = new google.maps.Marker({
+                        position: {lat: others[i].lat, lng: others[i].lng},
+                        title: "username: " + others[i].username + " distance: " + distance + "miles",
+                        icon: mark
+                    });
+                    marker.setMap(map);
+
+                    var infowindow = new google.maps.InfoWindow();
+
+                    google.maps.event.addListener(marker, 'click', function() {
+                        infowindow.setContent(this.title);
+                        infowindow.open(map, this);
+                    });
+                }
+
+                myMarker = new google.maps.Marker({
+                    position: {lat: myLat, lng: myLng},
+                    title: "username: 6VvCKigQ21 minimum distance: " + min_distance,
+                    icon: meMark
+                });
+                myMarker.setMap(map);
+
+                infowindow = new google.maps.InfoWindow();
+
+                google.maps.event.addListener(myMarker, 'click', function() {
+                    infowindow.setContent(myMarker.title);
+                    infowindow.open(map, myMarker);
+                });
+            }
+
+            var params;
+            var json_object;
+
+            var meMark = "myMark.png"
+            var car = "car.png"
+
+            function getMYLocation() {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    myLat = position.coords.latitude;
+                    myLng = position.coords.longitude;
+
+                    request.open("POST", "https://jordan-marsh.herokuapp.com/rides", true);
+                    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+                    params = "username=6VvCKigQ21&lat=" + myLat + "&lng=" + myLng;
+
+                    request.onreadystatechange = function() {
+                        if (request.readyState == 4 && request.status == 200) {
+                            json_object = JSON.parse(request.responseText);
+
+                            if (json_object.hasOwnProperty("passengers")) {
+                                others = json_obj.passengers;
+                                mark = "passenger.png";
+                            }
+                            else {
+                                others = json_object.vehicles;
+                                mark = "car.png";
+                            }
+                            renderMap();
+                        }
+                    }
+                    request.send(params);
+                });
+            }
+
+        </script>
+    </head>
+
+    <body onload = "initMap()">
+        <div id="map"></div>
+    </body>
+</html>
