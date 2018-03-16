@@ -13,8 +13,6 @@
 
             $("#msg").keydown(function(e) {
                 if (e.which == 13) {
-                    console.log();
-
                     $('#log').prepend(new Date()," - ", $(this).val(), "<br />");
                     localStorage.setItem("log", $("#log").html());
                 }
