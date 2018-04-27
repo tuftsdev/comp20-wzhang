@@ -1,0 +1,25 @@
+body {
+    background-color: #F0F8FF;
+}
+
+.header {
+    font-size: 20pt;
+    text-align: center;
+}
+
+.section {
+    font-size: 15pt;
+    text-align: center;
+}
+
+p {
+    font-size: 12pt;
+    text-align: center;
+}
+
+.image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}

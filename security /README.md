@@ -1,0 +1,1 @@
+I was hired to find at least 3 vulnerabilities in my partners code by analyzing my partners code from assignments 2 and 3. I have found three vulnerabilities in my partners work and have worked together with my partner, Rebecca Glass. I have spent approximately 4 hours on this assignment.
