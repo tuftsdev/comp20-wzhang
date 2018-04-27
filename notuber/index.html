@@ -82,7 +82,7 @@
                     myLat = position.coords.latitude;
                     myLng = position.coords.longitude;
 
-                    request.open("POST", "https://jordan-marsh.herokuapp.com/rides", true);
+                    request.open("POST", "https://immense-springs-96800.herokuapp.com/rides", true);
                     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
                     params = "username=6VvCKigQ21&lat=" + myLat + "&lng=" + myLng;
@@ -92,7 +92,7 @@
                             json_object = JSON.parse(request.responseText);
 
                             if (json_object.hasOwnProperty("passengers")) {
-                                others = json_obj.passengers;
+                                others = json_object.passengers;
                                 mark = "passenger.png";
                             }
                             else {
